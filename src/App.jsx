@@ -1,100 +1,100 @@
-import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import Home from './pages/Home'
-import Products from './pages/Products'
-import ProductDetail from './pages/ProductDetail'
-import CartPage from './pages/CartPage'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import Checkout from './pages/Checkout'
-import OrderConfirmation from './pages/OrderConfirmation'
-import NotFound from './pages/NotFound'
-import MyAccount from './pages/MyAccount'
-import Profile from './pages/account/Profile'
-import Orders from './pages/account/Orders'
-import OrderDetail from './pages/account/OrderDetail'
-import Wishlist from './pages/account/Wishlist'
-import Addresses from './pages/account/Addresses'
-import PaymentMethods from './pages/account/PaymentMethods'
-import { products as sampleProducts } from './data'
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
+import CartPage from './pages/CartPage';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Checkout from './pages/Checkout';
+import OrderConfirmation from './pages/OrderConfirmation';
+import NotFound from './pages/NotFound';
+import MyAccount from './pages/MyAccount';
+import Profile from './pages/account/Profile';
+import Orders from './pages/account/Orders';
+import OrderDetail from './pages/account/OrderDetail';
+import Wishlist from './pages/account/WishList';
+import Addresses from './pages/account/Addresses';
+import PaymentMethods from './pages/account/PaymentMethods';
+import { products as sampleProducts } from './data';
 
 export default function App() {
   const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem('cart')
-    return savedCart ? JSON.parse(savedCart) : []
-  })
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('isAuthenticated') === 'true'
-  })
+    return localStorage.getItem('isAuthenticated') === 'true';
+  });
 
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user')
-    return savedUser ? JSON.parse(savedUser) : null
-  })
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
-  const [products] = useState(sampleProducts)
+  const [products] = useState(sampleProducts);
 
   // Persist cart to localStorage
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems))
-  }, [cartItems])
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const addToCart = (product, quantity = 1) => {
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id)
+      const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
         return prevItems.map(item =>
           item.id === product.id 
             ? { ...item, quantity: item.quantity + quantity } 
             : item
-        )
+        );
       }
-      return [...prevItems, { ...product, quantity }]
-    })
-  }
+      return [...prevItems, { ...product, quantity }];
+    });
+  };
 
   const removeFromCart = (productId) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== productId))
-  }
+    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
+  };
 
   const updateQuantity = (productId, newQuantity) => {
-    if (newQuantity < 1) return
+    if (newQuantity < 1) return;
     setCartItems(prevItems => 
       prevItems.map(item =>
         item.id === productId 
           ? { ...item, quantity: newQuantity } 
           : item
       )
-    )
-  }
+    );
+  };
 
   const clearCart = () => {
-    setCartItems([])
-  }
+    setCartItems([]);
+  };
 
   const handleLogin = (userData) => {
-    setIsAuthenticated(true)
-    setUser(userData)
-    localStorage.setItem('isAuthenticated', 'true')
-    localStorage.setItem('user', JSON.stringify(userData))
-  }
+    setIsAuthenticated(true);
+    setUser(userData);
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
 
   const handleLogout = () => {
-    setIsAuthenticated(false)
-    setUser(null)
-    localStorage.removeItem('isAuthenticated')
-    localStorage.removeItem('user')
-  }
+    setIsAuthenticated(false);
+    setUser(null);
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
+  };
 
   const handleCheckout = () => {
     // In a real app, you would process payment here
     // For demo, we'll just clear the cart
-    clearCart()
-    return true
-  }
+    clearCart();
+    return true;
+  };
 
   return (
     <Router>
@@ -222,5 +222,5 @@ export default function App() {
         <Footer />
       </div>
     </Router>
-  )
+  );
 }
